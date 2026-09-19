@@ -6,7 +6,7 @@ import { getPosts } from "@/lib/posts";
 import { absoluteUrl, indexingAllowed } from "@/lib/seo/metadata";
 import { parsePostSeo, type PostSeo } from "@/lib/seo/schema";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 function languages(seo: Pick<PostSeo, "hreflang">, url: string) {
   if (seo.hreflang.length === 0) return undefined;
