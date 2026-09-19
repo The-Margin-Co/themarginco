@@ -83,7 +83,7 @@ npx supabase db reset  # re-apply migrations + seed.sql locally
 
 ## Database
 
-The source of truth is `supabase/migrations/`: `20260913000000_init.sql` (tables, RLS), `20260913010000_blog_cms.sql` (post SEO/image/status columns, admin update/delete, `media` bucket), `20260914000000_pages_cms.sql` (roles, page tables, publish/restore, `posts.seo`, `update_post_seo`, team functions), `20260915000000_case_studies_cms.sql` (`case_studies` table, `update_case_study_seo`), `20260916000000_leads_inbox.sql` (`leads.handled`, admin update/delete policies — `leads` had neither before) and `20260917000000_video_testimonials_cms.sql` (`video_testimonials` table, no SEO surface), `20260918000000_videos_bucket.sql` (`videos` bucket + admin-only policies, `video_url` must live in that bucket) and `20260918010000_lead_rate_limit.sql` (`submit_lead()` RPC, anon INSERT on `leads` removed, column-level grant on `pages`). Sample HTML posts and case studies are in `supabase/seed.sql`.
+The source of truth is `supabase/migrations/`: `20260913000000_init.sql` (tables, RLS), `20260913010000_blog_cms.sql` (post SEO/image/status columns, admin update/delete, `media` bucket), `20260914000000_pages_cms.sql` (roles, page tables, publish/restore, `posts.seo`, `update_post_seo`, team functions), `20260915000000_case_studies_cms.sql` (`case_studies` table, `update_case_study_seo`), `20260916000000_leads_inbox.sql` (`leads.handled`, admin update/delete policies — `leads` had neither before) and `20260917000000_video_testimonials_cms.sql` (`video_testimonials` table, no SEO surface), `20260918000000_videos_bucket.sql` (`videos` bucket + admin-only policies, `video_url` must live in that bucket) and `20260918010000_lead_rate_limit.sql` (`submit_lead()` RPC, anon INSERT on `leads` removed, column-level grant on `pages`) and `20260919000000_lead_ip_limit.sql` (per-IP-hash limit: 5/hour, `leads.ip_hash`). Sample HTML posts and case studies are in `supabase/seed.sql`.
 
 | Table | Columns |
 | --- | --- |
@@ -107,7 +107,7 @@ The source of truth is `supabase/migrations/`: `20260913000000_init.sql` (tables
 
 **Cloud:**
 1. Create the Supabase project.
-2. Run **all eight** migrations in order (`supabase db push`, or paste each into the SQL editor), then `seed.sql` (optional). Use the client's **own** project, never a shared one.
+2. Run **all nine** migrations in order (`supabase db push`, or paste each into the SQL editor), then `seed.sql` (optional). Use the client's **own** project, never a shared one.
 3. Add an admin user under Authentication → Users, then run the `insert into public.admins …` statement above.
 4. **Turn off public sign-ups** (Authentication → Sign In / Providers).
 5. Set the three env vars in Vercel and deploy.

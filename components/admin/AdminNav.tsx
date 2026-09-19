@@ -103,7 +103,7 @@ export function AdminNav({ role }: { role: StaffRole }) {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="CMS" className="flex gap-1 overflow-x-auto px-3 pb-3 lg:flex-col lg:overflow-visible lg:pb-0">
+    <nav aria-label="CMS" className="flex gap-1 overflow-x-auto px-3 pb-3 lg:min-h-0 lg:flex-1 lg:flex-col lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain lg:pb-4">
       {groups.map((group) => {
         const visible = group.items.filter((item) => item.roles.includes(role));
         if (visible.length === 0) return null;

@@ -23,7 +23,7 @@ export function AdminShell({
 }) {
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[15rem_minmax(0,1fr)]">
-      <aside className="border-b border-line bg-ink-2 lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col lg:border-b-0 lg:border-r">
+      <aside className="border-b border-line bg-ink-2 lg:sticky lg:top-0 lg:flex lg:h-dvh lg:min-h-0 lg:flex-col lg:border-b-0 lg:border-r">
         <div className="flex items-center gap-3 px-5 py-4 lg:py-6">
           <Link href="/admin/pages" className="flex items-center gap-2.5 rounded-lg">
             <LogoMark className="size-8" />
@@ -38,7 +38,7 @@ export function AdminShell({
 
         <AdminNav role={role} />
 
-        <div className="mt-auto hidden border-t border-line p-4 lg:block">
+        <div className="hidden shrink-0 border-t border-line p-4 lg:block">
           <p className="text-xs">Signed in as · {role === "admin" ? "Admin" : "SEO editor"}</p>
           <p className="truncate text-sm font-medium text-fg" title={email}>
             {email}

@@ -96,6 +96,7 @@ export type Database = {
           email: string
           handled: boolean
           id: string
+          ip_hash: string | null
           message: string
           name: string
           service: string
@@ -105,6 +106,7 @@ export type Database = {
           email: string
           handled?: boolean
           id?: string
+          ip_hash?: string | null
           message: string
           name: string
           service: string
@@ -114,6 +116,7 @@ export type Database = {
           email?: string
           handled?: boolean
           id?: string
+          ip_hash?: string | null
           message?: string
           name?: string
           service?: string
@@ -351,7 +354,7 @@ export type Database = {
       }
       staff_role: { Args: never; Returns: string }
       submit_lead: {
-        Args: { p_email: string; p_message: string; p_name: string; p_service: string }
+        Args: { p_email: string; p_ip_hash?: string; p_message: string; p_name: string; p_service: string }
         Returns: undefined
       }
       update_case_study_seo: {
