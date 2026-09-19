@@ -1,4 +1,4 @@
-# The Margin Co
+# The Margin Co 
 
 Agency website with a page CMS, blog, case studies, video testimonials and a leads inbox: Next.js 16, Tailwind CSS v4 and Supabase.
 
