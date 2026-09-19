@@ -9,7 +9,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import { TextStyleKit } from "@tiptap/extension-text-style";
 import { CharacterCount, Placeholder } from "@tiptap/extensions";
 import type { EditorView } from "@tiptap/pm/view";
-import { EditorContent, useEditor, useEditorState } from "@tiptap/react";
+import { EditorContent, useEditor, useEditorState, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {
   AlignCenter,
@@ -67,6 +67,31 @@ function imageFiles(list: FileList | null | undefined) {
 
 function isAllowedHref(href: string) {
   return /^(https?:\/\/|mailto:|tel:|\/|#)/i.test(href);
+}
+
+function readToolbarState(e: Editor) {
+  const level = [2, 3, 4, 5, 6].find((l) => e.isActive("heading", { level: l }));
+  return {
+    bold: e.isActive("bold"),
+    italic: e.isActive("italic"),
+    underline: e.isActive("underline"),
+    strike: e.isActive("strike"),
+    subscript: e.isActive("subscript"),
+    superscript: e.isActive("superscript"),
+    bulletList: e.isActive("bulletList"),
+    orderedList: e.isActive("orderedList"),
+    blockquote: e.isActive("blockquote"),
+    link: e.isActive("link"),
+    image: e.isActive("image"),
+    table: e.isActive("table"),
+    align: ALIGNMENTS.find((a) => e.isActive({ textAlign: a.value }))?.value ?? "left",
+    block: level ? `h${level}` : "p",
+    canUndo: e.can().undo(),
+    canRedo: e.can().redo(),
+    words: e.storage.characterCount.words(),
+    linkHref: (e.getAttributes("link").href as string | undefined) ?? "",
+    imageAlt: (e.getAttributes("image").alt as string | undefined) ?? "",
+  };
 }
 
 export function RichTextEditor({
@@ -179,34 +204,14 @@ export function RichTextEditor({
     onBlur: () => onBlurRef.current?.(),
   });
 
-  const ui = useEditorState({
+  // useEditorState only starts delivering values after the editor's first transaction, so with
+  // immediatelyRender:false it is null on first mount and the toolbar would never appear.
+  // Read the state directly until the hook takes over.
+  const liveUi = useEditorState({
     editor,
-    selector: ({ editor: e }) => {
-      if (!e) return null;
-      const level = [2, 3, 4, 5, 6].find((l) => e.isActive("heading", { level: l }));
-      return {
-        bold: e.isActive("bold"),
-        italic: e.isActive("italic"),
-        underline: e.isActive("underline"),
-        strike: e.isActive("strike"),
-        subscript: e.isActive("subscript"),
-        superscript: e.isActive("superscript"),
-        bulletList: e.isActive("bulletList"),
-        orderedList: e.isActive("orderedList"),
-        blockquote: e.isActive("blockquote"),
-        link: e.isActive("link"),
-        image: e.isActive("image"),
-        table: e.isActive("table"),
-        align: ALIGNMENTS.find((a) => e.isActive({ textAlign: a.value }))?.value ?? "left",
-        block: level ? `h${level}` : "p",
-        canUndo: e.can().undo(),
-        canRedo: e.can().redo(),
-        words: e.storage.characterCount.words(),
-        linkHref: (e.getAttributes("link").href as string | undefined) ?? "",
-        imageAlt: (e.getAttributes("image").alt as string | undefined) ?? "",
-      };
-    },
+    selector: ({ editor: e }) => (e ? readToolbarState(e) : null),
   });
+  const ui = liveUi ?? (editor ? readToolbarState(editor) : null);
 
   if (!editor || !ui) {
     return <div className="min-h-[34rem] animate-pulse rounded-xl border border-line bg-ink/70" />;
