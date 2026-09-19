@@ -146,6 +146,9 @@ export function VideoTestimonialEditor({
     >
       <input type="hidden" name="poster_image" value={values.poster_image} />
       <input type="hidden" name="video_url" value={values.video_url} />
+      {/* FeaturedImageField's own alt input is named for blog posts (featured_image_alt), so the
+          field the server action reads has to be submitted explicitly. */}
+      <input type="hidden" name="poster_image_alt" value={values.poster_image_alt} />
 
       <div className="min-w-0 space-y-6">
         {banner}
