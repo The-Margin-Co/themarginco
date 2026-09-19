@@ -1,12 +1,9 @@
-import type { MetadataRoute } from "next";
 import { getCaseStudies } from "@/lib/case-studies";
 import { getPublishedSeo } from "@/lib/cms/load";
 import { PAGES } from "@/lib/cms/registry";
 import { getPosts } from "@/lib/posts";
 import { absoluteUrl, indexingAllowed } from "@/lib/seo/metadata";
 import { parsePostSeo, type PostSeo } from "@/lib/seo/schema";
-
-export const revalidate = 300;
 
 function languages(seo: Pick<PostSeo, "hreflang">, url: string) {
   if (seo.hreflang.length === 0) return undefined;
@@ -16,7 +13,15 @@ function languages(seo: Pick<PostSeo, "hreflang">, url: string) {
   return { languages: entries };
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export type SitemapEntry = {
+  url: string;
+  lastModified?: Date;
+  changeFrequency: string;
+  priority: number;
+  alternates?: { languages: Record<string, string> };
+};
+
+export async function getSitemapEntries(): Promise<SitemapEntry[]> {
   const [{ site, pages }, posts, caseStudies] = await Promise.all([
     getPublishedSeo(),
     getPosts().catch(() => []),
@@ -66,5 +71,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       };
     });
 
-  return [...pageEntries, ...postEntries, ...caseStudyEntries];
+  // Listing pages change whenever their newest item does, so borrow that date when the page
+  // itself has none. (Only real dates are emitted: a made-up lastmod teaches crawlers to ignore it.)
+  const newest = (items: { lastModified: Date }[]) =>
+    items.reduce<Date | undefined>((max, item) => (!max || item.lastModified > max ? item.lastModified : max), undefined);
+  const listingDates: Record<string, Date | undefined> = { "/blog": newest(postEntries), "/case-studies": newest(caseStudyEntries) };
+  const pageList = pageEntries.map((entry) => {
+    const path = new URL(entry.url).pathname.replace(/\/$/, "") || "/";
+    const listed = listingDates[path];
+    return !entry.lastModified && listed ? { ...entry, lastModified: listed } : entry;
+  });
+
+  return [...pageList, ...postEntries, ...caseStudyEntries];
 }
