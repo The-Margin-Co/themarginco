@@ -1,0 +1,72 @@
+import {
+  Brain,
+  ChartColumn,
+  ChartLine,
+  Clapperboard,
+  CodeXml,
+  Crosshair,
+  Eye,
+  FileText,
+  Gauge,
+  Handshake,
+  Lightbulb,
+  MapPin,
+  Megaphone,
+  MousePointerClick,
+  PenTool,
+  Radar,
+  Repeat,
+  Rocket,
+  Scissors,
+  Search,
+  ShieldCheck,
+  ShoppingBag,
+  ShoppingCart,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Users,
+  Workflow,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
+
+// Icons are stored in the CMS by name; this is the curated set editors can pick from.
+export const ICONS = {
+  Brain,
+  ChartColumn,
+  ChartLine,
+  Clapperboard,
+  CodeXml,
+  Crosshair,
+  Eye,
+  FileText,
+  Gauge,
+  Handshake,
+  Lightbulb,
+  MapPin,
+  Megaphone,
+  MousePointerClick,
+  PenTool,
+  Radar,
+  Repeat,
+  Rocket,
+  Scissors,
+  Search,
+  ShieldCheck,
+  ShoppingBag,
+  ShoppingCart,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Users,
+  Workflow,
+  Zap,
+} satisfies Record<string, LucideIcon>;
+
+export type IconName = keyof typeof ICONS;
+export const ICON_NAMES = Object.keys(ICONS) as [IconName, ...IconName[]];
+
+export function iconFor(name: string): LucideIcon {
+  return ICONS[name as IconName] ?? Sparkles;
+}
