@@ -61,9 +61,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   );
 
   return (
-    <html lang={site.seo.html_lang} data-theme={THEME} className={`${inter.variable} ${jakarta.variable} h-full`}>
+    <html lang={site.seo.html_lang} data-theme={THEME} className={`${inter.variable} ${jakarta.variable} h-full overflow-x-hidden`}>
       {/* Extensions like Grammarly/ColorZilla inject attributes on <body> before hydration. */}
-      <body className="flex min-h-full flex-col" suppressHydrationWarning>
+      <body className="flex min-h-full flex-col overflow-x-hidden" suppressHydrationWarning>
         <a
           href="#main"
           className="sr-only z-[100] rounded-full bg-accent px-4 py-2 font-semibold text-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4"

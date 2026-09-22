@@ -209,7 +209,7 @@ export function Navbar({
           aria-label="Menu"
           className={cn(
             "fixed inset-y-0 right-0 z-[70] flex w-[min(22rem,88vw)] flex-col border-l border-line bg-charcoal shadow-2xl transition-transform duration-300 ease-out",
-            drawerOpen ? "translate-x-0" : "translate-x-full",
+            drawerOpen ? "translate-x-0 visible" : "translate-x-full invisible",
           )}
         >
           <div className="flex items-center justify-between border-b border-line px-5 py-4">
