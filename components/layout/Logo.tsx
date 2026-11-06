@@ -30,7 +30,7 @@ export function LogoMark({ className }: { className?: string }) {
 export function LogoWordmark({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 945 158"
+      viewBox="0 0 965 158"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
